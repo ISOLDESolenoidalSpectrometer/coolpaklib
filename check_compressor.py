@@ -98,6 +98,14 @@ if len(res) > 0:
 
 else :
 	print('No response received.')
+	actual_status = 0
+	# Post to InfluxDB
+	payload = 'powerstatus,device=compressor value=' + str(actual_status)
+	try:
+		r = requests.post( 'https://dbod-iss.cern.ch:8080/write?db=he', data=payload, auth=("admin","issmonitor"), verify=False, timeout=HTTP_TIMEOUT )
+	except Exception:
+		pass
+
 
 # Check from file if the compressor was already OFF previously to avoid sending multiple email alerts
 last_status = '1'
